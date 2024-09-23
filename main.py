@@ -11,4 +11,10 @@ response = requests.get(url)
 
 data = response.json()
 
-print(data)
+prices = data['Time Series (Daily)']
+
+df = pd.DataFrame.from_dict(prices, orient="index")
+
+df = df.astype(float)
+
+print(df.head())
