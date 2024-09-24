@@ -17,4 +17,9 @@ df = pd.DataFrame.from_dict(prices, orient="index")
 
 df = df.astype(float)
 
-print(df.head())
+df = pd.DataFrame({"Close":[150, 152, 153, 151, 149, 150, 152, 154, 153, 155]})
+
+#Obliczanie średniej kroczącej
+df['SMA_5']= df['Close'].rolling(window=5).mean()
+
+df["SMA_10"] = df["Close"].rolling(window=10).mean()
