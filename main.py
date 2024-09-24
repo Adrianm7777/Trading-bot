@@ -53,3 +53,20 @@ def trade (signal, stock_price, balance , holdings):
     return balance, holdings
     
 balance, holdings = trade(signal, stock_price, balance , holdings)
+
+transaction = []
+
+def log_transaction (date, signal, stock_price, balance, holdings):
+    transaction.append({
+        "Date": date,
+        "Action": signal,
+        "Price": stock_price,
+        "Balance": balance,
+        "Holdings": holdings
+    })
+
+log_transaction('2024-09-21', signal, stock_price, balance, holdings)
+
+df_transaction = pd.DataFrame(transaction)
+
+print(df_transaction)
