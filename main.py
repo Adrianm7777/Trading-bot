@@ -42,7 +42,14 @@ def trade (signal, stock_price, balance , holdings):
     if signal == "buy" and balance >= stock_price:
         holdings += 1
         balance -= stock_price
-
         print(f"Bought 1 stock at {stock_price}, new balance: {balance}, holdings: {holdings}")
-
-        
+    elif signal == "sell" and holdings > 0:
+        holdings -= 1
+        balance += stock_price
+        print (f"Sold 1 stock at {stock_price}, new balance: {balance}, holdings: {holdings}") 
+    else:
+        print("No trade executed")
+    
+    return balance, holdings
+    
+balance, holdings = trade(signal, stock_price, balance , holdings)
