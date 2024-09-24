@@ -17,9 +17,18 @@ df = pd.DataFrame.from_dict(prices, orient="index")
 
 df = df.astype(float)
 
-df = pd.DataFrame({"Close":[150, 152, 153, 151, 149, 150, 152, 154, 153, 155]})
-
 #Obliczanie średniej kroczącej
-df['SMA_5']= df['Close'].rolling(window=5).mean()
+df['SMA_5'] = df['4. close'].rolling(window=5).mean()
 
-df["SMA_10"] = df["Close"].rolling(window=10).mean()
+# Dodajemy prostą średnią kroczącą (SMA) dla 10 dni
+df['SMA_10'] = df['4. close'].rolling(window=10).mean()
+
+#Defining a trading strategy
+def check_signal(df):
+    if df['SMA_5'].iloc[-1] > df['SMA_10'].iloc[-1]:
+        return 'buy'
+    else:
+        return 'sell'
+
+signal = check_signal(df)
+print(f"Signal: {signal}")
