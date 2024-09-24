@@ -25,10 +25,24 @@ df['SMA_10'] = df['4. close'].rolling(window=10).mean()
 
 #Defining a trading strategy
 def check_signal(df):
-    if df['SMA_5'].iloc[-1] > df['SMA_10'].iloc[-1]:
+    if df["SMA_5"].iloc[-1] > df["SMA_10"].iloc[-1]:
         return 'buy'
     else:
         return 'sell'
 
 signal = check_signal(df)
 print(f"Signal: {signal}")
+
+balance = 1000
+holdings = 0 
+stock_price = 150
+
+
+def trade (signal, stock_price, balance , holdings):
+    if signal == "buy" and balance >= stock_price:
+        holdings += 1
+        balance -= stock_price
+
+        print(f"Bought 1 stock at {stock_price}, new balance: {balance}, holdings: {holdings}")
+
+        
