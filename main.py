@@ -1,5 +1,6 @@
 import pandas as pd
 import requests
+import time
 
 API_KEY="25IO3T1D8V69J8DM"
 
@@ -70,3 +71,9 @@ log_transaction('2024-09-21', signal, stock_price, balance, holdings)
 df_transaction = pd.DataFrame(transaction)
 
 print(df_transaction)
+
+while True:
+    signal = check_signal(df)
+    balance, holdings = trade(signal, stock_price, balance, holdings)
+    log_transaction(time.strftime("%Y-%m-%d %H:%M:%S"), signal, stock_price, balance, holdings)
+    time.sleep(60)
