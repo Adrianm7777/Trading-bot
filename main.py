@@ -18,10 +18,8 @@ df = pd.DataFrame.from_dict(prices, orient="index")
 
 df = df.astype(float)
 
-#Obliczanie średniej kroczącej
 df['SMA_5'] = df['4. close'].rolling(window=5).mean()
 
-# Dodajemy prostą średnią kroczącą (SMA) dla 10 dni
 df['SMA_10'] = df['4. close'].rolling(window=10).mean()
 
 #Defining a trading strategy
