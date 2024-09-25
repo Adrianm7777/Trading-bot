@@ -26,6 +26,8 @@ df['SMA_5'] = df['4. close'].rolling(window=5).mean()
 
 df['SMA_10'] = df['4. close'].rolling(window=10).mean()
 
+df.dropna(inplace=True)
+
 #Defining a trading strategy
 def check_signal(df):
     if df["SMA_5"].iloc[-1] > df["SMA_10"].iloc[-1]:
@@ -79,3 +81,11 @@ while True:
     balance, holdings = trade(signal, stock_price, balance, holdings)
     log_transaction(time.strftime("%Y-%m-%d %H:%M:%S"), signal, stock_price, balance, holdings)
     time.sleep(60)
+
+
+    X = df[["SMA_5, SMA_10"]]
+
+    y = df["Close"].shift(-1)
+
+    X = X[:-1]
+    y = y.dropna()
