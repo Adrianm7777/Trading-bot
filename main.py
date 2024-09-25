@@ -1,8 +1,12 @@
+from dotenv import load_dotenv
+import os
 import pandas as pd
 import requests
 import time
 
-API_KEY="25IO3T1D8V69J8DM"
+load_dotenv()
+
+API_KEY=os.getenv("API_KEY")
 
 symbol="AAPL"
 
