@@ -56,6 +56,21 @@ def log_transaction(transaction, date, signal, stock_price, balance, holdings):
         "Balance": balance,
         "Holdings": holdings
     })
+
+    payload = {
+         "Date": date,
+        "Action": signal,
+        "Price": stock_price,
+        "Balance": balance,
+        "Holdings": holdings
+
+    }
+
+    response = requests.post("http://localhost:8000/transactions/", json=payload)
+    if response.status_code == 201:
+        print("Transaction logged successfully")
+    else:
+        print("Failed to log transaction")
     return pd.DataFrame(transaction)
 
 # Funkcja do trenowania modelu RandomForest
