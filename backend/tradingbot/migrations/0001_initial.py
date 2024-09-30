@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                 ('date', models.DateTimeField()),
                 ('action', models.CharField(max_length=10)),
                 ('price', models.FloatField()),
-                ('blance', models.FloatField()),
+                ('balance', models.FloatField()),
                 ('holdings', models.IntegerField()),
             ],
         ),

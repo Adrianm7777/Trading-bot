@@ -4,7 +4,7 @@ class Transaction(models.Model):
     date = models.DateTimeField()
     action = models.CharField(max_length=10)
     price = models.FloatField()
-    blance = models.FloatField()
+    balance = models.FloatField()
     holdings = models.IntegerField()
 
 class Portfolio(models.Model):
