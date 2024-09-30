@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 def get_stock_data(symbol):
     load_dotenv()
     API_KEY = os.getenv("API_KEY")
+    symbol = "AAPL"
     url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={API_KEY}'
     response = requests.get(url)
     data = response.json()
