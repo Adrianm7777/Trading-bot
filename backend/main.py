@@ -92,7 +92,11 @@ def train_model(df):
     print(f"Model accuracy: {score:.2f}")
     plot_predictions(y_test, predictions)
     
-    return model
+    return {
+        "real": y_test.tolist(),
+        "predicted": predictions.tolist(),
+        "accuracy": score
+    }
 
 # Funkcja do tworzenia wykresu
 def plot_predictions(y_test, predictions):
