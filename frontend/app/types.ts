@@ -1,18 +1,18 @@
 export interface IPortfolio {
-  total_balance: number;
+  balance: number;
+  holdings: number;
 }
 
 export interface ITransaction {
   id: number;
-  description: string;
-  amount: number;
+  action: string;
+  price: number;
+  date: string;
+  balance: number;
+  holdings: number;
 }
 
 export interface IDashboardProps {
   portfolio: IPortfolio;
   transactions: ITransaction[];
-  predictions: Array<{
-    id: number;
-    prediction: string;
-  }>;
 }
