@@ -6,7 +6,8 @@ import { ITransaction } from "./types";
 const Dashboard = async () => {
   const portfolio = await getPortfolio();
   const transactions = await getTransaction();
-
+  console.log(portfolio);
+  console.log(transactions);
   return (
     <div className="min-h-screen bg-gray-100 relative">
       <header className="bg-gray-800 text-white p-6 text-center">
