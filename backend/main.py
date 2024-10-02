@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 import matplotlib.pyplot as plt
+from datetime import datetime
 
 # Funkcja do pobierania danych giełdowych
 def get_stock_data(symbol):
@@ -50,28 +51,30 @@ def trade(signal, stock_price, balance, holdings):
 
 # Funkcja do logowania transakcji
 def log_transaction(transaction, date, signal, stock_price, balance, holdings):
+    date = datetime.now().isoformat() 
+
     transaction.append({
-        "Date": date,
-        "Action": signal,
-        "Price": stock_price,
-        "Balance": balance,
-        "Holdings": holdings
+        "date": date,
+        "action": signal,
+        "price": stock_price,
+        "balance": balance,
+        "holdings": holdings
     })
 
     payload = {
-         "Date": date,
-        "Action": signal,
-        "Price": stock_price,
-        "Balance": balance,
-        "Holdings": holdings
-
+        "date": date,
+        "action": signal,
+        "price": stock_price,
+        "balance": balance,
+        "holdings": holdings
     }
 
+    print("Payload to be sent:", payload)
     response = requests.post("http://localhost:8000/transactions/", json=payload)
     if response.status_code == 201:
         print("Transaction logged successfully")
     else:
-        print("Failed to log transaction")
+        print(f"Failed to log transaction: {response.status_code}, {response.text}")
     return pd.DataFrame(transaction)
 
 # Funkcja do trenowania modelu RandomForest
@@ -112,7 +115,7 @@ def main():
     symbol = "AAPL"
     stock_price = 150
     balance = 1000
-    holdings = 0
+    holdings = 10
     transaction = []
     
     df = get_stock_data(symbol)
