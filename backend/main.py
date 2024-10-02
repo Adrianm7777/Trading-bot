@@ -124,7 +124,7 @@ def main():
     while True:
         signal = check_signal(df)
         balance, holdings = trade(signal, stock_price, balance, holdings)
-        df_transaction = log_transaction(transaction, time.strftime("%Y-%m-%d %H:%M:%S"), signal, stock_price, balance, holdings)
+        # df_transaction = log_transaction(transaction, time.strftime("%Y-%m-%d %H:%M:%S"), signal, stock_price, balance, holdings)
         
         train_model(df)
         
