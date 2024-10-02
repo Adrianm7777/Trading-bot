@@ -15,4 +15,12 @@ export interface ITransaction {
 export interface IDashboardProps {
   portfolio: IPortfolio;
   transactions: ITransaction[];
+  predictions: IPrediction[];
+}
+
+export interface IPrediction {
+  id: number;
+  symbol: string;
+  predicted_price: number;
+  confidence: number | null;
 }
