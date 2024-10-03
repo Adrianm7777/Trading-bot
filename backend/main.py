@@ -70,7 +70,7 @@ def log_transaction(transaction, date, signal, stock_price, balance, holdings):
     }
 
     print("Payload to be sent:", payload)
-    response = requests.post("http://localhost:8000/transactions/", json=payload)
+    response = requests.post("http://localhost:8000/api/transactions/", json=payload)
     if response.status_code == 201:
         print("Transaction logged successfully")
     else:
@@ -124,7 +124,7 @@ def main():
     while True:
         signal = check_signal(df)
         balance, holdings = trade(signal, stock_price, balance, holdings)
-        # df_transaction = log_transaction(transaction, time.strftime("%Y-%m-%d %H:%M:%S"), signal, stock_price, balance, holdings)
+        df_transaction = log_transaction(transaction, time.strftime("%Y-%m-%d %H:%M:%S"), signal, stock_price, balance, holdings)
         
         train_model(df)
         
