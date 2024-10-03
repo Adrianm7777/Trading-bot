@@ -5,7 +5,7 @@ import { ITransaction, IPortfolio } from "./types";
 
 const Dashboard = () => {
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
-  const [portfolio, setPortfolio] = useState<IPortfolio | null>(null);
+  const [portfolio, setPortfolio] = useState<IPortfolio[]>([]); // Używamy tablicy
 
   const fetchTransactions = async () => {
     const transactionsData = await getTransaction();
@@ -14,7 +14,7 @@ const Dashboard = () => {
 
   const fetchPortfolio = async () => {
     const portfolioData = await getPortfolio();
-    setPortfolio(portfolioData);
+    setPortfolio(portfolioData); // Ustawiamy jako tablicę
   };
 
   useEffect(() => {
@@ -39,11 +39,18 @@ const Dashboard = () => {
         <section className="mb-8">
           <h2 className="text-2xl font-bold mb-4">Portfolio</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="bg-white p-4 rounded-lg shadow-md">
-              <h3 className="text-lg font-semibold">Total Balance</h3>
-              <p className="text-xl font-bold">${portfolio?.balance}</p>
-              <p>Holdings: {portfolio?.holdings}</p>
-            </div>
+            {portfolio.length > 0 ? ( // Sprawdź, czy portfolio ma elementy
+              <div className="bg-white p-4 rounded-lg shadow-md">
+                <h3 className="text-lg font-semibold">Total Balance</h3>
+                <p className="text-xl font-bold">
+                  ${portfolio[0].balance}
+                </p>{" "}
+                {/* Uzyskujemy dostęp do pierwszego elementu */}
+                <p>Holdings: {portfolio[0].holdings}</p>
+              </div>
+            ) : (
+              <p>Loading portfolio data...</p>
+            )}
           </div>
         </section>
 
@@ -51,12 +58,12 @@ const Dashboard = () => {
         <section className="mb-8">
           <h2 className="text-2xl font-bold mb-4">Recent Transactions</h2>
           <div className="bg-white p-4 rounded-lg shadow-md">
-            {transactions?.length > 0 ? (
+            {transactions.length > 0 ? ( // Sprawdzenie długości tablicy transakcji
               <ul>
                 {transactions.map((transaction) => (
                   <li key={transaction.id}>
-                    {transaction?.action}: $
-                    {transaction?.price?.toFixed(2) || 0} at {transaction?.date}
+                    {transaction.action}: ${transaction.price?.toFixed(2) || 0}{" "}
+                    at {transaction.date}
                   </li>
                 ))}
               </ul>
