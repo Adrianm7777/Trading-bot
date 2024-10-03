@@ -1,13 +1,33 @@
-"use server";
-
+"use client";
+import { useState, useEffect } from "react";
 import { getPortfolio, getTransaction } from "./services/getServerSideProps";
-import { ITransaction } from "./types";
+import { ITransaction, IPortfolio } from "./types";
 
-const Dashboard = async () => {
-  const portfolio = await getPortfolio();
-  const transactions = await getTransaction();
-  console.log(portfolio);
-  console.log(transactions);
+const Dashboard = () => {
+  const [transactions, setTransactions] = useState<ITransaction[]>([]);
+  const [portfolio, setPortfolio] = useState<IPortfolio | null>(null);
+
+  const fetchTransactions = async () => {
+    const transactionsData = await getTransaction();
+    setTransactions(transactionsData);
+  };
+
+  const fetchPortfolio = async () => {
+    const portfolioData = await getPortfolio();
+    setPortfolio(portfolioData);
+  };
+
+  useEffect(() => {
+    fetchTransactions();
+    fetchPortfolio();
+
+    const interval = setInterval(() => {
+      fetchTransactions();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-100 relative">
       <header className="bg-gray-800 text-white p-6 text-center">
@@ -33,7 +53,7 @@ const Dashboard = async () => {
           <div className="bg-white p-4 rounded-lg shadow-md">
             {transactions?.length > 0 ? (
               <ul>
-                {transactions.map((transaction: ITransaction) => (
+                {transactions.map((transaction) => (
                   <li key={transaction.id}>
                     {transaction?.action}: $
                     {transaction?.price?.toFixed(2) || 0} at {transaction?.date}
