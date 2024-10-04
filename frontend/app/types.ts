@@ -20,7 +20,7 @@ export interface IDashboardProps {
 
 export interface IPrediction {
   id: number;
-  symbol: string;
-  predicted_price: number;
-  confidence: number | null;
+  real: number;
+  predicted: number;
+  accuracy: number;
 }
