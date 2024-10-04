@@ -21,6 +21,6 @@ export interface IDashboardProps {
 export interface IPrediction {
   id: number;
   real: number;
-  predicted: number;
+  predicted_price: number;
   accuracy: number;
 }
