@@ -1,11 +1,37 @@
 "use client";
 import { useState, useEffect } from "react";
-import { getPortfolio, getTransaction } from "./services/getServerSideProps";
-import { ITransaction, IPortfolio } from "./types";
+import { Line } from "react-chartjs-2"; // Import chart.js
+import {
+  Chart as ChartJS,
+  CategoryScale, // Import the category scale
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import {
+  getPortfolio,
+  getTransaction,
+  getPredictions,
+} from "./services/getServerSideProps";
+import { ITransaction, IPortfolio, IPrediction } from "./types";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const Dashboard = () => {
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
-  const [portfolio, setPortfolio] = useState<IPortfolio[]>([]); // Używamy tablicy
+  const [portfolio, setPortfolio] = useState<IPortfolio[]>([]);
+  const [predictions, setPredictions] = useState<IPrediction[]>([]);
 
   const fetchTransactions = async () => {
     const transactionsData = await getTransaction();
@@ -14,12 +40,18 @@ const Dashboard = () => {
 
   const fetchPortfolio = async () => {
     const portfolioData = await getPortfolio();
-    setPortfolio(portfolioData); // Ustawiamy jako tablicę
+    setPortfolio(portfolioData);
+  };
+
+  const fetchPredictions = async () => {
+    const predictionsData = await getPredictions(); // Pobieramy dane prognoz
+    setPredictions(predictionsData);
   };
 
   useEffect(() => {
     fetchTransactions();
     fetchPortfolio();
+    fetchPredictions();
 
     const interval = setInterval(() => {
       fetchTransactions();
@@ -27,6 +59,29 @@ const Dashboard = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  // Dane dla wykresu prognoz
+  const chartData = {
+    labels: predictions?.map(
+      (_: IPrediction, index: number) => `Day ${index + 1}`
+    ),
+    datasets: [
+      {
+        label: "Real Price",
+        data: predictions.map((prediction) => prediction.real), // Access 'real' prices
+        fill: false,
+        borderColor: "rgba(75,192,192,1)",
+        tension: 0.1,
+      },
+      {
+        label: "Predicted Price",
+        data: predictions.map((prediction) => prediction.predicted), // Access 'predicted' prices
+        fill: false,
+        borderColor: "rgba(255,99,132,1)",
+        tension: 0.1,
+      },
+    ],
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 relative">
@@ -39,13 +94,10 @@ const Dashboard = () => {
         <section className="mb-8">
           <h2 className="text-2xl font-bold mb-4">Portfolio</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {portfolio.length > 0 ? ( // Sprawdź, czy portfolio ma elementy
+            {portfolio.length > 0 ? (
               <div className="bg-white p-4 rounded-lg shadow-md">
                 <h3 className="text-lg font-semibold">Total Balance</h3>
-                <p className="text-xl font-bold">
-                  ${portfolio[0].balance}
-                </p>{" "}
-                {/* Uzyskujemy dostęp do pierwszego elementu */}
+                <p className="text-xl font-bold">${portfolio[0].balance}</p>
                 <p>Holdings: {portfolio[0].holdings}</p>
               </div>
             ) : (
@@ -58,7 +110,7 @@ const Dashboard = () => {
         <section className="mb-8">
           <h2 className="text-2xl font-bold mb-4">Recent Transactions</h2>
           <div className="bg-white p-4 rounded-lg shadow-md">
-            {transactions.length > 0 ? ( // Sprawdzenie długości tablicy transakcji
+            {transactions.length > 0 ? (
               <ul>
                 {transactions.map((transaction) => (
                   <li key={transaction.id}>
@@ -70,6 +122,14 @@ const Dashboard = () => {
             ) : (
               <p>No recent transactions.</p>
             )}
+          </div>
+        </section>
+
+        {/* Predictions Section */}
+        <section className="mb-8">
+          <h2 className="text-2xl font-bold mb-4">Price Predictions</h2>
+          <div className="bg-white p-4 rounded-lg shadow-md">
+            <Line data={chartData} />
           </div>
         </section>
       </main>
