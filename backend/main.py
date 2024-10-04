@@ -68,8 +68,6 @@ def log_transaction(transaction, date, signal, stock_price, balance, holdings):
         "balance": balance,
         "holdings": holdings
     }
-
-    print("Payload to be sent:", payload)
     response = requests.post("http://localhost:8000/api/transactions/", json=payload)
     if response.status_code == 201:
         print("Transaction logged successfully")
@@ -94,7 +92,21 @@ def train_model(df):
     
     print(f"Model accuracy: {score:.2f}")
     plot_predictions(y_test, predictions)
+
+    for real, predicted in zip(y_test.tolist(), predictions.tolist()):
+        payload = {
+            "real": float(real),  
+            "predicted_price": float(predicted),  
+            "symbol": "AAPL",  
+            "accuracy": score
+        }
     
+    response = requests.post("http://localhost:8000/api/predictions/", json=payload)
+    if response.status_code == 201:
+        print("Predictions logged successfully")
+    else:
+        print(f"Failed to log predictions: {response.status_code}, {response.text}")
+
     return {
         "real": y_test.tolist(),
         "predicted": predictions.tolist(),
