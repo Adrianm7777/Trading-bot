@@ -2,7 +2,7 @@ from django.db import models
 
 class Transaction(models.Model):
     date = models.DateTimeField()
-    action = models.CharField(max_length=10)
+    action = models.CharField(max_length=10) 
     price = models.FloatField()
     balance = models.FloatField()
     holdings = models.IntegerField()
@@ -16,4 +16,4 @@ class Prediction(models.Model):
     date =models.DateTimeField(auto_now_add=True)
     predicted_price = models.FloatField()
     symbol = models.CharField(max_length=10)
-    confidence =models.FloatField(null=True, blank=True)
+    confidence =models.FloatField(blank=True)
