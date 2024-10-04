@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Line } from "react-chartjs-2"; // Import chart.js
+import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
-  CategoryScale, // Import the category scale
+  CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
@@ -44,7 +44,7 @@ const Dashboard = () => {
   };
 
   const fetchPredictions = async () => {
-    const predictionsData = await getPredictions(); // Pobieramy dane prognoz
+    const predictionsData = await getPredictions();
     setPredictions(predictionsData);
   };
 
@@ -60,22 +60,20 @@ const Dashboard = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Dane dla wykresu prognoz
+  // Chart data
   const chartData = {
-    labels: predictions?.map(
-      (_: IPrediction, index: number) => `Day ${index + 1}`
-    ),
+    labels: predictions.map((_, index) => `Prediction ${index + 1}`),
     datasets: [
       {
         label: "Real Price",
-        data: predictions.map((prediction) => prediction.real), // Access 'real' prices
+        data: predictions.map((prediction) => prediction.real),
         fill: false,
         borderColor: "rgba(75,192,192,1)",
         tension: 0.1,
       },
       {
         label: "Predicted Price",
-        data: predictions.map((prediction) => prediction.predicted), // Access 'predicted' prices
+        data: predictions.map((prediction) => prediction.predicted_price),
         fill: false,
         borderColor: "rgba(255,99,132,1)",
         tension: 0.1,
