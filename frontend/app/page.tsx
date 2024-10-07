@@ -15,6 +15,7 @@ import {
   getPortfolio,
   getTransaction,
   getPredictions,
+  getRunBot,
 } from "./services/getServerSideProps";
 import { ITransaction, IPortfolio, IPrediction } from "./types";
 
@@ -32,6 +33,7 @@ const Dashboard = () => {
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
   const [portfolio, setPortfolio] = useState<IPortfolio[]>([]);
   const [predictions, setPredictions] = useState<IPrediction[]>([]);
+  const [botStatus, setBotStatus] = useState<string>("");
 
   const fetchTransactions = async () => {
     const transactionsData = await getTransaction();
@@ -46,6 +48,18 @@ const Dashboard = () => {
   const fetchPredictions = async () => {
     const predictionsData = await getPredictions();
     setPredictions(predictionsData);
+  };
+  const runBot = async () => {
+    try {
+      const response = await getRunBot();
+      if (response) {
+        setBotStatus("Bot started successfully!");
+      } else {
+        setBotStatus("Failed to start the bot.");
+      }
+    } catch (error) {
+      setBotStatus("An error occurred while starting the bot.");
+    }
   };
 
   useEffect(() => {
@@ -88,6 +102,18 @@ const Dashboard = () => {
       </header>
 
       <main className="p-6">
+        <section className="mb-8">
+          <h2 className="text-2xl font-bold mb-4">Start Trading Bot</h2>
+          <div className="bg-white p-4 rounded-lg shadow-md flex justify-center flex-col items-center">
+            <button
+              onClick={runBot}
+              className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 w-[10%]"
+            >
+              Play
+            </button>
+            {botStatus && <p className="mt-4">{botStatus}</p>}
+          </div>
+        </section>
         {/* Portfolio Section */}
         <section className="mb-8">
           <h2 className="text-2xl font-bold mb-4">Portfolio</h2>
