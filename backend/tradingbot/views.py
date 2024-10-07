@@ -22,7 +22,7 @@ class PredictionViewSet(viewsets.ModelViewSet):
 @api_view(["POST"])
 def run_trading_bot(request):
     try:
-        subprocess.Popen(["python", "Trading-bot\backend\main.py"])
+        subprocess.Popen(["python", r"C:\Users\acer\Trading-bot\backend\main.py"])
         return Response({"message": "Trading bot started successfully!"}, status=200)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
