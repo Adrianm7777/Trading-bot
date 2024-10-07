@@ -27,3 +27,14 @@ export async function getPredictions() {
 
   return predictions;
 }
+
+export async function getRunBot() {
+  const response = await fetch("http://localhost:8000/api/run-bot/", {
+    method: "POST",
+  });
+  if (!response.ok) {
+    throw new Error("Failed to start the bot");
+  }
+  const runBot = await response.json();
+  return runBot;
+}
